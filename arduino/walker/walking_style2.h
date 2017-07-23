@@ -16,6 +16,20 @@ class WalkingStyle2 {
     void continueWalking(int speed);
     void stopWalking();
 
+    void setStandUpPosition();
+    void standUp();
+    void liftMiddleLegs();
+    void riseMiddleLegs();
+    void liftFrontLegs();
+    void moveFrontRightLeg();
+    void moveFrontLeftLeg();
+
+    void moveMiddleRightLeg();
+    void moveMiddleLeftLeg();
+
+    void moveRareRightLeg();
+    void moveRareLeftLeg();        
+
     void setDownLeftLegServoPositions(int L, int servo1, int servo2);
     void setDownRightLegServoPositions(int L, int servo1, int servo2);
     void moveLeftLegServoPositions(int L, int servo1, int servo2);

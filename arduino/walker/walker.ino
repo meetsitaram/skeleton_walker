@@ -71,30 +71,41 @@ void setup() {
   //   Serial.print("Starting in "); Serial.print(t); Serial.println(" seconds");
   //   delay(1000);
   // }
+  delay(5000);
 
   // style.setDownRightLegServoPositions(L_MAX, servoN11, servoN12);  
+  style.setStandUpPosition();
+  delay(2000);
+  style.standUp();
+  delay(3000);
+  style.liftMiddleLegs();
+  delay(3000);
+  style.riseMiddleLegs();
+  delay(3000);
+  //style.liftFrontLegs();
+  style.moveFrontRightLeg();
+  delay(3000);
+  style.moveFrontLeftLeg();
+  delay(3000);
+  //style.liftMiddleLegs();
+  //delay(3000);
+  //style.moveMiddleRightLeg();
+  //delay(3000);
+  //style.moveMiddleLeftLeg();
+  //delay(3000);
+  style.moveRareRightLeg();
+  delay(3000);
+  style.moveRareLeftLeg();
+  delay(3000);
+
 
   yield();
 }
 
 void loop() {
 
-  // initialCallibrate(servoN10);
-
   // initialCallibrate(servoN30);
-  // initialCallibrate(servoN40); 
-  // initialCallibrate(servoN50);
-  // initialCallibrate(servoN60);
 
-  // initialCallibrate(servoN31);
-  // initialCallibrate(servoN41);
-  // initialCallibrate(servoN51);
-  // initialCallibrate(servoN61);
-
-  // initialCallibrate(servoN32);
-  // initialCallibrate(servoN42);
-  // initialCallibrate(servoN52);
-  // initialCallibrate(servoN62);
 
   // delay(2000);
   // return;

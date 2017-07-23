@@ -7,6 +7,147 @@ WalkingStyle2::WalkingStyle2() {
     }
 }
 
+void WalkingStyle2::setStandUpPosition() {
+    setServoPosition(servoN60, 60);
+    setServoPosition(servoN50, 120);
+    setServoPosition(servoN20, 120);
+    setServoPosition(servoN10, 60);
+
+    setServoPosition(servoN22, 70);
+    setServoPosition(servoN42, 70);
+    setServoPosition(servoN62, 70);
+    setServoPosition(servoN12, 110);
+    setServoPosition(servoN32, 110);
+    setServoPosition(servoN52, 110);
+}
+
+void WalkingStyle2::standUp() {
+    setServoPosition(servoN21, 60);
+    setServoPosition(servoN41, 40);
+    setServoPosition(servoN61, 60);
+    setServoPosition(servoN11, 120);
+    setServoPosition(servoN31, 140);
+    setServoPosition(servoN51, 120);
+}
+
+void WalkingStyle2::liftMiddleLegs() {
+    setServoPosition(servoN30, initThetaN30);
+    setServoPosition(servoN31, initThetaN31);
+    setServoPosition(servoN32, initThetaN32);
+
+    setServoPosition(servoN40, initThetaN40);
+    setServoPosition(servoN41, initThetaN41);
+    setServoPosition(servoN42, initThetaN42);    
+}
+
+void WalkingStyle2::riseMiddleLegs() {
+    liftMiddleLegs();
+    delay(1000);
+
+    setServoPosition(servoN42, 50);
+    setServoPosition(servoN32, 130);  
+    delay(1000);
+    setServoPosition(servoN41, 40);
+    setServoPosition(servoN31, 140);      
+    
+}
+
+void WalkingStyle2::liftFrontLegs() {
+    setServoPosition(servoN11, initThetaN11);
+    setServoPosition(servoN21, initThetaN21);
+
+    setServoPosition(servoN12, initThetaN12);    
+    setServoPosition(servoN22, initThetaN22);     
+
+    setServoPosition(servoN10, initThetaN10);
+    setServoPosition(servoN20, initThetaN20);    
+}
+
+void WalkingStyle2::moveFrontRightLeg() {
+    setServoPosition(servoN11, initThetaN11);
+    setServoPosition(servoN12, initThetaN12);  
+    setServoPosition(servoN10, initThetaN10);
+
+    delay(2000);
+
+    setServoPosition(servoN10, 30);
+    delay(500);
+    setServoPosition(servoN12, 110);
+    delay(1000);
+    setServoPosition(servoN11, 120);
+}
+
+void WalkingStyle2::moveFrontLeftLeg() {
+    setServoPosition(servoN21, initThetaN21);
+    setServoPosition(servoN22, initThetaN22);
+    setServoPosition(servoN20, initThetaN20); 
+
+    delay(2000);
+
+    setServoPosition(servoN20, 150);
+    delay(500);
+    setServoPosition(servoN22, 70);
+    delay(1000);
+    setServoPosition(servoN21, 60);
+}
+
+void WalkingStyle2::moveMiddleRightLeg() {
+
+    setServoPosition(servoN31, initThetaN31);
+    setServoPosition(servoN32, initThetaN32);  
+    setServoPosition(servoN30, initThetaN30);
+
+    delay(2000);
+
+    setServoPosition(servoN30, 60);
+    delay(500);
+    setServoPosition(servoN32, 130);
+    delay(1000);
+    setServoPosition(servoN31, 120);
+}
+
+void WalkingStyle2::moveMiddleLeftLeg() {
+    setServoPosition(servoN41, initThetaN41);
+    setServoPosition(servoN42, initThetaN42);
+    setServoPosition(servoN40, initThetaN40); 
+
+    delay(2000);
+
+    setServoPosition(servoN40, 120);
+    delay(500);
+    setServoPosition(servoN42, 50);
+    delay(1000);
+    setServoPosition(servoN41, 60);
+}
+
+void WalkingStyle2::moveRareRightLeg() {
+    setServoPosition(servoN51, initThetaN51);
+    setServoPosition(servoN52, initThetaN52);  
+    setServoPosition(servoN50, initThetaN50);
+
+    delay(2000);
+
+    setServoPosition(servoN50, 150);
+    delay(500);
+    setServoPosition(servoN52, 110);
+    delay(1000);
+    setServoPosition(servoN51, 120);
+}
+
+void WalkingStyle2::moveRareLeftLeg() {
+    setServoPosition(servoN61, initThetaN61);
+    setServoPosition(servoN62, initThetaN62);
+    setServoPosition(servoN60, initThetaN60); 
+
+    delay(2000);
+
+    setServoPosition(servoN60, 30);
+    delay(500);
+    setServoPosition(servoN62, 70);
+    delay(1000);
+    setServoPosition(servoN61, 60);
+}
+
 void WalkingStyle2::startWalking() {
 
 }
