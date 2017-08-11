@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "fine_tune.ino",
+    "port": "COM5"
+}

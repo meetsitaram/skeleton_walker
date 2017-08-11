@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "inverse_kinematics.ino",
+    "port": "COM5"
+}
