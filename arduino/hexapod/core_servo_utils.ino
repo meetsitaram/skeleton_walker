@@ -35,6 +35,7 @@ void setServoPosition(int servoNum, int theta) {
   int servoMax = -1;
   int thetaMin = -1;
   int thetaMax = -1;
+  int thetaOffset = 0;
   int pos60 = -1;
   int pos120 = -1;
   switch(servoNum) {
@@ -43,108 +44,126 @@ void setServoPosition(int servoNum, int theta) {
       servoMax = sn10_pos120;
       thetaMin = s0_min;
       thetaMax = s0_max;
+      thetaOffset = sn10_theta_offset;
       break;  
     case sn20_pin:
       servoMin = sn20_pos60;
       servoMax = sn20_pos120;
       thetaMin = s0_min;
       thetaMax = s0_max;
+      thetaOffset = sn20_theta_offset;
       break;
     case sn30_pin:
       servoMin = sn30_pos60;
       servoMax = sn30_pos120;
       thetaMin = s0_min;
       thetaMax = s0_max;
+      thetaOffset = sn30_theta_offset;
       break;
     case sn40_pin:
       servoMin = sn40_pos60;
       servoMax = sn40_pos120;
       thetaMin = s0_min;
       thetaMax = s0_max;
+      thetaOffset = sn40_theta_offset;
       break;
     case sn50_pin:
       servoMin = sn50_pos60;
       servoMax = sn50_pos120;
       thetaMin = s0_min;
       thetaMax = s0_max;
+      thetaOffset = sn50_theta_offset;
       break;
     case sn60_pin:
       servoMin = sn60_pos60;
       servoMax = sn60_pos120;
       thetaMin = s0_min;
       thetaMax = s0_max;
+      thetaOffset = sn60_theta_offset;
       break;
     case sn11_pin:
       servoMin = sn11_pos60;
       servoMax = sn11_pos120;
       thetaMin = s1_min;
       thetaMax = s1_max;
+      thetaOffset = sn11_theta_offset;
       break;  
     case sn21_pin:
       servoMin = sn21_pos60;
       servoMax = sn21_pos120;
       thetaMin = s1_min;
       thetaMax = s1_max;
+      thetaOffset = sn21_theta_offset;
       break;
     case sn31_pin:
       servoMin = sn31_pos60;
       servoMax = sn31_pos120;
       thetaMin = s1_min;
       thetaMax = s1_max;
+      thetaOffset = sn31_theta_offset;
       break;
     case sn41_pin:
       servoMin = sn41_pos60;
       servoMax = sn41_pos120;
       thetaMin = s1_min;
       thetaMax = s1_max;
+      thetaOffset = sn41_theta_offset;
       break;
     case sn51_pin:
       servoMin = sn51_pos60;
       servoMax = sn51_pos120;
       thetaMin = s1_min;
       thetaMax = s1_max;
+      thetaOffset = sn51_theta_offset;
       break;
     case sn61_pin:
       servoMin = sn61_pos60;
       servoMax = sn61_pos120;
       thetaMin = s1_min;
       thetaMax = s1_max;
+      thetaOffset = sn61_theta_offset;
       break;
     case sn12_pin:
       servoMin = sn12_pos60;
       servoMax = sn12_pos120;
       thetaMin = s2_min;
       thetaMax = s2_max;
+      thetaOffset = sn12_theta_offset;
       break;  
     case sn22_pin:
       servoMin = sn22_pos60;
       servoMax = sn22_pos120;
       thetaMin = s2_min;
       thetaMax = s2_max;
+      thetaOffset = sn22_theta_offset;
       break;
     case sn32_pin:
       servoMin = sn32_pos60;
       servoMax = sn32_pos120;
       thetaMin = s2_min;
       thetaMax = s2_max;
+      thetaOffset = sn32_theta_offset;
       break;
     case sn42_pin:
       servoMin = sn42_pos60;
       servoMax = sn42_pos120;
       thetaMin = s2_min;
       thetaMax = s2_max;
+      thetaOffset = sn42_theta_offset;
       break;
     case sn52_pin:
       servoMin = sn52_pos60;
       servoMax = sn52_pos120;
       thetaMin = s2_min;
       thetaMax = s2_max;
+      thetaOffset = sn52_theta_offset;
       break;
     case sn62_pin:
       servoMin = sn62_pos60;
       servoMax = sn62_pos120;
       thetaMin = s2_min;
       thetaMax = s2_max;
+      thetaOffset = sn62_theta_offset;
       break;
     default:
       Serial.println("invalid servo:" + getServoName(servoNum) );
@@ -168,9 +187,14 @@ void setServoPosition(int servoNum, int theta) {
     return; //raise exception
   }
 
-  double pulseLength = map(theta, THETA_MIN_FOR_MAP, THETA_MAX_FOR_MAP, servoMin, servoMax);
+  int thetaActual = theta;
+  if(theta + thetaOffset > thetaMin && theta + thetaOffset < thetaMax) {
+    thetaActual = theta + thetaOffset;
+  }
+  double pulseLength = map(thetaActual, THETA_MIN_FOR_MAP, THETA_MAX_FOR_MAP, servoMin, servoMax);
 
-  Serial.print("Theta:"); Serial.print(theta);
+    Serial.print("Theta:"); Serial.print(theta); 
+    Serial.print(" + Theta Offset:"); Serial.print(thetaOffset); 
   Serial.print(", Pulse:");Serial.print(pulseLength);
   Serial.print(", servo:"); Serial.println(getServoName(servoNum));
     
@@ -239,6 +263,7 @@ void abortTask(int code) {
   Serial.print("Task Aborted with code:"); Serial.println(code);
   taskAbortCode = code;
   taskAborted = true;
+  delay(60000);
 
 }
 bool isTaskAborted() {
@@ -252,28 +277,24 @@ void setInitialServoPositions() {
 
   setServoPosition(sn10_pin, initThetaN10);
   setServoPosition(sn20_pin, initThetaN20);
-
-  setServoPosition(sn11_pin, initThetaN11);
-  setServoPosition(sn21_pin, initThetaN21);
-
-  setServoPosition(sn12_pin, initThetaN12);
-  setServoPosition(sn22_pin, initThetaN22);
-  
   setServoPosition(sn30_pin, initThetaN30);
   setServoPosition(sn40_pin, initThetaN40);
-
-  setServoPosition(sn31_pin, initThetaN31);
-  setServoPosition(sn41_pin, initThetaN41);
-
-  setServoPosition(sn32_pin, initThetaN32);
-  setServoPosition(sn42_pin, initThetaN42);
-
   setServoPosition(sn50_pin, initThetaN50);
   setServoPosition(sn60_pin, initThetaN60);
 
+
+  setServoPosition(sn11_pin, initThetaN11);
+  setServoPosition(sn21_pin, initThetaN21);
+  setServoPosition(sn31_pin, initThetaN31);
+  setServoPosition(sn41_pin, initThetaN41);
   setServoPosition(sn51_pin, initThetaN51);
   setServoPosition(sn61_pin, initThetaN61);
 
+
+  setServoPosition(sn12_pin, initThetaN12);
+  setServoPosition(sn22_pin, initThetaN22);
+  setServoPosition(sn32_pin, initThetaN32);
+  setServoPosition(sn42_pin, initThetaN42);
   setServoPosition(sn52_pin, initThetaN52);
-  setServoPosition(sn62_pin, initThetaN62);
+  setServoPosition(sn62_pin, initThetaN62);  
 }
