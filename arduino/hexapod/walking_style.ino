@@ -135,43 +135,40 @@ void WalkingStyle::stand() {
   // start in resting mode
   h = INIT_H;
   for(int lg=1; lg<=6; ++lg) {
-    setArmPosition(lg, h, f, v); // leg_number, sideway distance, forward distance, height
+    setArmPosition(lg, h, 0, v); // leg_number, sideway distance, forward distance, height
   }
 
   Serial.println("task position at zero height");
-  Serial.print("h,f,v:"); Serial.print(h); Serial.print(",");
-  Serial.print(f); Serial.print(","); Serial.println(v);
+  Serial.print("h,v:"); Serial.print(h); Serial.print(",");Serial.println(v);
   v = 0;
   for(int lg=1; lg<=6; ++lg) {
-    setArmPosition(lg, h, f, v); 
+    setArmPosition(lg, h, 0, v); 
   }
   delay(300);
 
   Serial.println("move all shoulders up a little bit");
-  Serial.print("h,f,v:"); Serial.print(h); Serial.print(",");
-  Serial.print(f); Serial.print(","); Serial.println(v);
+  Serial.print("h,v:"); Serial.print(h); Serial.print(","); Serial.println(v);
   for(; v<-6; --v) {
     for(int lg=1; lg<=6; ++lg) {
-      setArmPosition(lg, h, f, v); 
+      setArmPosition(lg, h, 0, v); 
     }
     //delay(100);
   }
   delay(300);
 
   Serial.println("position each leg one bit closer to final position, one after another");
-  Serial.print("h,f,v:"); Serial.print(h); Serial.print(",");
-  Serial.print(f); Serial.print(","); Serial.println(v);
+  Serial.print("h,v:"); Serial.print(h); Serial.print(","); Serial.println(v);
   h = h - 5;
   v = 0;
   for(int lg=1; lg<=6; ++lg) {
-    setArmPosition(lg, h, f, v); 
+    setArmPosition(lg, h, 0, v); 
     delay(100);
   }
   delay(500);
 
   for(; v<10; v = v + 2) {
     for(int lg=1; lg<=6; ++lg) {
-      setArmPosition(lg, h, f, v); 
+      setArmPosition(lg, h, 0, v); 
     }
     delay(50);
   }
@@ -186,36 +183,77 @@ void WalkingStyle::sit() {
   // set to resting position
   for(; v > 0; v = v - 2) {
     for(int lg=1; lg<=6; ++lg) {
-      setArmPosition(lg, h, f, v);
+      setArmPosition(lg, h, 0, v);
     }
     delay(50);
   }
   h = INIT_H;
   v = -1;
   for(int lg=1; lg<=6; ++lg) {
-    setArmPosition(lg, h, f, v);
+    setArmPosition(lg, h, 0, v);
   }
   delay(500);
 
 }
 
+void WalkingStyle::setLegF(int lg, double f) {
+
+  // still not very clear how this logic is working...
+
+  if(!isLeftLeg(lg)) {
+    f = -f;
+  }
+  if(lg == 1 || lg == 3 || lg == 5) {
+    fSet1 = f;
+  } else {
+    fSet2 = f;
+  }  
+}
+
+double WalkingStyle::getLegF(int lg) {
+  if(lg == 1 || lg == 3 || lg == 5) {
+    return fSet1;
+  } else {
+    return fSet2;
+  }
+}
+
 void WalkingStyle::raiseLeg(int lg) {
   Serial.print("raiseLeg:"); Serial.println(lg);
 
-  setArmPosition(lg, h, f, 0);
+  setArmPosition(lg, h, getLegF(lg), 0);
 }
 
 void WalkingStyle::lowerLegSeq1(int lg) {
   Serial.print("lowerLegSeq1:"); Serial.println(lg);
 
-  setArmPosition(lg, h, f, v/2, true);
+  setArmPosition(lg, h, getLegF(lg), v/2, true);
 }
 
 void WalkingStyle::lowerLegSeq2(int lg) {
   Serial.print("lowerLegSeq1:"); Serial.println(lg);
 
-  setArmPosition(lg, h-2, f, v, true);
+  setArmPosition(lg, h-2, getLegF(lg), v, true);
+}
 
+bool WalkingStyle::isLeftLeg(int lg) {
+  if(lg ==1 || lg == 3 || lg == 5) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void WalkingStyle::moveLegForward(int lg, double f) {
+  // this is for legs on the ground
+  setLegF(lg, f);
+  setArmPosition(lg, h-2, getLegF(lg), v, true);
+}
+
+void WalkingStyle::moveLegBack(int lg, double f) {
+  // this is for legs lifted
+  setLegF(lg, f);
+  setArmPosition(lg, h, getLegF(lg), 0, true);
 }
 
 void WalkingStyle::executeSequenceSS() {
@@ -226,44 +264,107 @@ void WalkingStyle::executeSequenceSS() {
   delay(2000);
 }
 
+void WalkingStyle::raiseLegSet(int setNum) {
+  if(setNum == 1) {
+    raiseLeg(1);
+    raiseLeg(4);
+    raiseLeg(5);
+    delay(100);
+  } else {
+    raiseLeg(3);
+    raiseLeg(2);
+    raiseLeg(6);
+    delay(100);
+  }
+}
+
+
+void WalkingStyle::lowerLegSet(int setNum) {
+  if(setNum == 1) {
+    lowerLegSeq1(1);
+    lowerLegSeq1(4);
+    lowerLegSeq1(5);
+    delay(100);
+
+    lowerLegSeq2(1);
+    lowerLegSeq2(4);
+    lowerLegSeq2(5);
+    //delay(100);
+
+  } else {
+    lowerLegSeq1(3);
+    lowerLegSeq1(2);
+    lowerLegSeq1(6);
+    delay(100);
+
+    lowerLegSeq2(3);
+    lowerLegSeq2(2);
+    lowerLegSeq2(6);
+    //delay(100);
+  }
+}
+
+void WalkingStyle::moveForwardLegSet(int setNum) {
+  double df = 3;
+  if(setNum == 1) {
+    moveLegForward(1, df);
+    moveLegForward(4, df);
+    moveLegForward(5, df);
+    //delay(200);
+
+  } else {
+    moveLegForward(3, df);
+    moveLegForward(2, df);
+    moveLegForward(6, df);
+    //delay(200);
+  }
+
+  // for(double df=0; df<=2; df = df+0.2) {
+  //   if(setNum == 1) {
+  //     moveLegForward(1, df);
+  //     moveLegForward(4, df);
+  //     moveLegForward(5, df);
+  //     //delay(200);
+
+  //   } else {
+  //     moveLegForward(3, df);
+  //     moveLegForward(2, df);
+  //     moveLegForward(6, df);
+  //     //delay(200);
+  //   }    
+  //   delay(10);
+  // }
+
+}
+
+void WalkingStyle::moveBackwardLegSet(int setNum) {
+  double df = -3;
+  if(setNum == 1) {
+    moveLegBack(1, df);
+    moveLegBack(4, df);
+    moveLegBack(5, df);
+    //delay(200);
+
+  } else {
+    moveLegBack(3, df);
+    moveLegBack(2, df);
+    moveLegBack(6, df);
+    //delay(200);
+  }
+}
+
 void WalkingStyle::executeSequenceSH() {
   // stand, say hai, sit
   stand();
   delay(2000);
   
   for(int i=1; i<=3; ++i) {
-    raiseLeg(3);
-    raiseLeg(2);
-    raiseLeg(6);
-    delay(300);
-
-    lowerLegSeq1(3);
-    lowerLegSeq1(2);
-    lowerLegSeq1(6);
-    delay(300);
-
-    lowerLegSeq2(3);
-    lowerLegSeq2(2);
-    lowerLegSeq2(6);
-    delay(300);
-
+    raiseLegSet(2);
+    lowerLegSet(2);
     delay(500);
 
-    raiseLeg(1);
-    raiseLeg(4);
-    raiseLeg(5);
-    delay(300);
-
-    lowerLegSeq1(1);
-    lowerLegSeq1(4);
-    lowerLegSeq1(5);
-    delay(300);
-
-    lowerLegSeq2(1);
-    lowerLegSeq2(4);
-    lowerLegSeq2(5);
-    delay(300);
-
+    raiseLegSet(1);
+    lowerLegSet(1);
     delay(500);
   }
   delay(2000);
@@ -271,9 +372,34 @@ void WalkingStyle::executeSequenceSH() {
   delay(2000);
 }
 
+void WalkingStyle::executeSequenceWalk() {
+  // stand, say hai, sit
+  stand();
+  delay(2000);
+  
+  for(int i=1; i<=15; ++i) {
+    raiseLegSet(2);
+    moveForwardLegSet(1);
+    moveBackwardLegSet(2);
+    lowerLegSet(2);
+    //delay(100);
+
+    raiseLegSet(1);
+    moveForwardLegSet(2);
+    moveBackwardLegSet(1);    
+    lowerLegSet(1);
+    //delay(100);
+  }
+  delay(2000);
+  
+  sit();
+  delay(2000);
+}
+
 void WalkingStyle::go() {
   while(true) {
     //executeSequenceSS();
-    executeSequenceSH();
+    //executeSequenceSH();
+    executeSequenceWalk();
   }
 }

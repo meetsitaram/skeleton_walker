@@ -23,7 +23,7 @@ const int SERVO_THETA_DIFFERENTIAL = 20; // before the angle hold kicks in, we h
 const int sn30_pin = 4;      // 0 + 0 (shield_offset, pin_num)
 const int sn30_pos60 = 236;
 const int sn30_pos120 = 354;
-const int sn30_theta_offset = -5;
+const int sn30_theta_offset = -3;
 
 const int sn31_pin = 5;      // 0 + 0 (shield_offset, pin_num)
 const int sn31_pos60 = 195;
@@ -84,7 +84,7 @@ const int sn22_theta_offset = 5;
 const int sn50_pin = 24;      // 16 + 8 (shield_offset, pin_num)
 const int sn50_pos60 = 218;
 const int sn50_pos120 = 345;
-const int sn50_theta_offset = -3;
+const int sn50_theta_offset = 0;
 
 const int sn51_pin = 25;      // 16 + 9 (shield_offset, pin_num)
 const int sn51_pos60 = 209;
